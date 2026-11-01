@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>NEON ARENA — Забронируй ПК за 30 секунд</title>
+    <meta name="description" content="Киберспортивный клуб с RTX 4090, 240Hz и бронью за 30 секунд. Приходи — ПК уже включён.">
+    
+    <!-- FAVICON (SVG-прицел в acid lime) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230A0A10'/%3E%3Ccircle cx='16' cy='16' r='7' stroke='%23C9FF00' stroke-width='2' fill='none'/%3E%3Cline x1='16' y1='3' x2='16' y2='9' stroke='%23C9FF00' stroke-width='2'/%3E%3Cline x1='16' y1='23' x2='16' y2='29' stroke='%23C9FF00' stroke-width='2'/%3E%3Cline x1='3' y1='16' x2='9' y2='16' stroke='%23C9FF00' stroke-width='2'/%3E%3Cline x1='23' y1='16' x2='29' y2='16' stroke='%23C9FF00' stroke-width='2'/%3E%3Ccircle cx='16' cy='16' r='1.5' fill='%23C9FF00'/%3E%3C/svg%3E">
+    
+    <!-- APPLE TOUCH ICON -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' fill='%230A0A10'/%3E%3Ccircle cx='90' cy='90' r='40' stroke='%23C9FF00' stroke-width='8' fill='none'/%3E%3Cline x1='90' y1='15' x2='90' y2='50' stroke='%23C9FF00' stroke-width='8'/%3E%3Cline x1='90' y1='130' x2='90' y2='165' stroke='%23C9FF00' stroke-width='8'/%3E%3Cline x1='15' y1='90' x2='50' y2='90' stroke='%23C9FF00' stroke-width='8'/%3E%3Cline x1='130' y1='90' x2='165' y2='90' stroke='%23C9FF00' stroke-width='8'/%3E%3Ccircle cx='90' cy='90' r='8' fill='%23C9FF00'/%3E%3C/svg%3E">
+
+    <!-- OPEN GRAPH (шаринг в TG/VK/WhatsApp) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NEON ARENA — Забронируй ПК за 30 секунд">
+    <meta property="og:description" content="RTX 4090, 240Hz, кресла DXRacer. Приходи — ПК уже включён. Без очередей и звонков.">
+    <meta property="og:image" content="https://alphastatex.github.io/neon-arena/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://alphastatex.github.io/neon-arena/">
+    <meta property="og:locale" content="ru_RU">
+    <meta property="og:site_name" content="NEON ARENA">
+
+    <!-- TWITTER CARD -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="NEON ARENA — Забронируй ПК за 30 секунд">
+    <meta name="twitter:description" content="RTX 4090, 240Hz. Приходи — ПК уже включён.">
+    <meta name="twitter:image" content="https://alphastatex.github.io/neon-arena/og-image.jpg">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="boot-screen">
+      <div class="boot-terminal mono">
+        <div class="boot-line" id="line1"></div>
+        <div class="boot-line" id="line2"></div>
+        <div class="boot-line" id="line3"></div>
+        <div class="boot-line accent-line" id="line4"></div>
+      </div>
+    </div>
+
+    <div class="noise-overlay"></div>
+
+    <div class="cursor-crosshair" id="cursor">
+      <div class="ch-line top"></div>
+      <div class="ch-line bottom"></div>
+      <div class="ch-line left"></div>
+      <div class="ch-line right"></div>
+      <div class="ch-dot"></div>
+    </div>
+
+    <header class="navbar">
+      <div class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+          <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+          <line x1="12" y1="0" x2="12" y2="5" stroke="currentColor" stroke-width="2"/>
+          <line x1="12" y1="19" x2="12" y2="24" stroke="currentColor" stroke-width="2"/>
+          <line x1="0" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="2"/>
+          <line x1="19" y1="12" x2="24" y2="12" stroke="currentColor" stroke-width="2"/>
+          <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+        </svg>
+        NEON<span>ARENA</span>
+      </div>
+      <nav>
+        <a href="#hardware">Железо</a>
+        <a href="#pricing">Тарифы</a>
+        <a href="#tournaments">Турниры</a>
+      </nav>
+      <div class="navbar-right">
+        <button class="sound-toggle" id="sound-toggle" aria-label="Включить/выключить звук">
+          <svg class="icon-sound-on" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+          </svg>
+          <svg class="icon-sound-off" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" style="display: none;">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <line x1="23" y1="9" x2="17" y2="15"></line>
+            <line x1="17" y1="9" x2="23" y2="15"></line>
+          </svg>
+        </button>
+        <button class="btn-primary" id="open-booking">ЗАБРОНИРОВАТЬ</button>
+      </div>
+    </header>
+
+    <main class="split-layout">
+      <div class="content-col">
+        
+        <section class="hero-section" id="hero">
+          <div class="meta-tag mono">[ МОСКВА / ОТКРЫТО 24/7 ]</div>
+          <h1 class="main-title" data-split>
+            ЗАБРОНИРУЙ<br>
+            <span class="accent">ЗА 30 СЕКУНД</span>
+          </h1>
+          <p class="hero-desc">Приходи — ПК уже включён. RTX 4090, 240Hz, кресла DXRacer. Без очередей, без звонков, без «сейчас всё занято».</p>
+          <a href="#pricing" class="btn-primary">ВЫБРАТЬ ТАРИФ</a>
+        </section>
+
+        <section class="manifesto-section">
+          <h2 class="section-title">МЫ НЕ ПРОДАЁМ<br><span>ЧАСЫ ЗА ПК</span></h2>
+          <p class="section-text">Мы продаём вечер, который не хочется прерывать. Бронируешь онлайн за 30 секунд. Приходишь — ПК уже включён. Играешь без лагов. Уходишь с желанием вернуться.</p>
+        </section>
+
+        <section id="how" class="how-section section-block">
+          <h2 class="section-title">КАК ЭТО<br><span>РАБОТАЕТ</span></h2>
+          <div class="how-grid">
+            <div class="how-step">
+              <div class="how-num">01</div>
+              <h3>Выбираешь ПК</h3>
+              <p>На карте — 15 мест. Видишь, что свободно, выбираешь, оплачиваешь. 30 секунд.</p>
+            </div>
+            <div class="how-step">
+              <div class="how-num">02</div>
+              <h3>Приходишь</h3>
+              <p>ПК уже включён. Кресло настроено. Никаких «сейчас подождите, я запущу».</p>
+            </div>
+            <div class="how-step">
+              <div class="how-num">03</div>
+              <h3>Играешь</h3>
+              <p>240Hz, RTX 4090, 0 потерь пакетов. Уходишь — с бронью на следующий раз.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="hardware" class="bento-section section-block">
+          <h2 class="section-title">ЧТО ВНУТРИ</h2>
+          <div class="bento-grid">
+            <div class="bento-item large tech-card">
+              <div class="corner-marks"></div>
+              <div class="mono label">01 / GPU</div>
+              <h3>RTX 4090</h3>
+              <p>24GB VRAM. Чтобы твои 240 FPS были реальными, а не «на минималках».</p>
+            </div>
+            <div class="bento-item tech-card">
+              <div class="corner-marks"></div>
+              <div class="mono label">02 / ДИСПЛЕЙ</div>
+              <h3>240Hz</h3>
+              <p>Чтобы видеть врага раньше, чем он увидит тебя.</p>
+            </div>
+            <div class="bento-item tech-card">
+              <div class="corner-marks"></div>
+              <div class="mono label">03 / CPU</div>
+              <h3>Intel i9</h3>
+              <p>Чтобы загрузка карты не была самой долгой частью вечера.</p>
+            </div>
+            <div class="bento-item wide tech-card">
+              <div class="corner-marks"></div>
+              <div class="mono label">04 / СЕТЬ</div>
+              <h3>1 Gbps</h3>
+              <p>Выделенный канал. 0% потерь пакетов. Чтобы пинг не решал за тебя.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="pricing" class="pricing-section section-block">
+          <h2 class="section-title">ВЫБЕРИ УРОВЕНЬ</h2>
+          <div class="pricing-grid">
+            <div class="price-card tech-card">
+              <div class="corner-marks"></div>
+              <div class="mono">STANDARD</div>
+              <div class="price">300₽<span>/час</span></div>
+              <p class="price-desc">Для тех, кто хочет играть без тормозов и без переплат. RTX 3060, 144Hz — всё для комфортного вечера.</p>
+              <ul>
+                <li>RTX 3060</li>
+                <li>144Hz</li>
+                <li>Стандартное место</li>
+              </ul>
+              <button class="btn-outline open-modal-btn">ЗАНЯТЬ МЕСТО</button>
+            </div>
+            <div class="price-card featured tech-card">
+              <div class="corner-marks"></div>
+              <div class="badge">ХИТ</div>
+              <div class="mono">VIP</div>
+              <div class="price">500₽<span>/час</span></div>
+              <p class="price-desc">Для тех, кто хочет почувствовать разницу. RTX 4090, 240Hz, диван, приоритетная бронь.</p>
+              <ul>
+                <li>RTX 4090</li>
+                <li>240Hz</li>
+                <li>VIP-зона с диваном</li>
+              </ul>
+              <button class="btn-primary open-modal-btn">ЗАНЯТЬ МЕСТО</button>
+            </div>
+          </div>
+        </section>
+
+        <section id="tournaments" class="tournaments-section section-block">
+          <h2 class="section-title">ПЯТНИЦА. ТУРНИР.<br><span>50 000₽</span></h2>
+          <div class="tournaments-grid">
+            <div class="tournament-card tech-card">
+              <div class="corner-marks"></div>
+              <div class="tournament-date mono">15.11.2026</div>
+              <h3>CS2</h3>
+              <div class="prize mono">ПРИЗОВОЙ ФОНД: 50 000₽</div>
+              <button class="btn-outline">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            </div>
+            <div class="tournament-card tech-card">
+              <div class="corner-marks"></div>
+              <div class="tournament-date mono">22.11.2026</div>
+              <h3>VALORANT</h3>
+              <div class="prize mono">ПРИЗОВОЙ ФОНД: 30 000₽</div>
+              <button class="btn-outline">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            </div>
+            <div class="tournament-card tech-card">
+              <div class="corner-marks"></div>
+              <div class="tournament-date mono">29.11.2026</div>
+              <h3>DOTA 2</h3>
+              <div class="prize mono">ПРИЗОВОЙ ФОНД: 100 000₽</div>
+              <button class="btn-outline">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+            </div>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <div class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+              <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="2" fill="none"/>
+              <line x1="12" y1="0" x2="12" y2="5" stroke="currentColor" stroke-width="2"/>
+              <line x1="12" y1="19" x2="12" y2="24" stroke="currentColor" stroke-width="2"/>
+              <line x1="0" y1="12" x2="5" y2="12" stroke="currentColor" stroke-width="2"/>
+              <line x1="19" y1="12" x2="24" y2="12" stroke="currentColor" stroke-width="2"/>
+              <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+            </svg>
+            NEON<span>ARENA</span>
+          </div>
+          <div class="mono">© 2026 / MOSCOW</div>
+        </footer>
+      </div>
+
+      <div class="mouse-col">
+        <div class="sticky-mouse">
+          <div class="mouse-container" id="mouse-container">
+            <img src="/mouse.png" alt="Gaming Mouse" class="mouse-img" />
+          </div>
+          <div class="sys-monitor mono">
+            <div class="sys-line">SYS.STATUS: <span class="txt-accent">ONLINE</span></div>
+            <div class="sys-line">LOAD: <span id="scroll-progress">0</span>%</div>
+            <div class="sys-line">PING: <span id="ping-value">12</span>ms</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div class="modal-overlay" id="booking-modal">
+      <div class="modal-content">
+        <button class="modal-close" id="close-modal">&times;</button>
+        <h3 class="modal-title">ВЫБЕРИ СВОЙ ПК</h3>
+        <p class="modal-subtitle mono">ЗЕЛЕНЫЙ — СВОБОДЕН / КРАСНЫЙ — ЗАНЯТ</p>
+        <div class="pc-grid" id="pc-grid"></div>
+        <div class="modal-footer">
+          <div class="selected-info mono">
+            ВЫБРАНО: <span id="selected-pc-display">НЕ ВЫБРАНО</span>
+          </div>
+          <button class="btn-primary" id="confirm-booking" disabled>ПОДТВЕРДИТЬ БРОНЬ</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
